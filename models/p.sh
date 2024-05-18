@@ -8,5 +8,5 @@ fi
 
 filename="$1"
 git add "$filename"
-git commit -m "Added $filename"
+git commit -m "$filename"
 git push

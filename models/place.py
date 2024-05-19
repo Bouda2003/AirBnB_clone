@@ -1,7 +1,10 @@
 #!/usr/bin/python3
+"""place model"""
 from models.base_model import BaseModel
 
+
 class Place(BaseModel):
+    """place class"""
     city_id = ""
     user_id = ""
     name = ""
@@ -15,4 +18,5 @@ class Place(BaseModel):
     amenity_ids = []
 
     def __init__(self, *args, **kwargs):
+        """initialize a new instanve"""
         super().__init__(*args, **kwargs)

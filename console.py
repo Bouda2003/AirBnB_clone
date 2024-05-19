@@ -19,10 +19,10 @@ class HBNBCommand(cmd.Cmd):
         prompt (str): The command prompt.
     """
     prompt = "(hbnb)"
-    used_classes = {"BaseModel", "User", "State", "City", "place", "Amenity", "Review"}
+    used_classes = ["BaseModel", "User", "State", "City", "place", "Amenity", "Review"]
 
 
-    def empty_line(self):
+    def emptyline(self):
         """I think Iam blind"""
         pass
     def do_quit(self, arg):

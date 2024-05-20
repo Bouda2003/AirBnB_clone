@@ -9,6 +9,7 @@
 import os
 import models
 import unittest
+from time import sleep
 from datetime import datetime
 from models.base_modle import BaseModel
 
@@ -32,3 +33,36 @@ class TestBaseModel_instant(unittest.TestCase):
         self.assertEqual(datetime, type(BaseModel().updated_at))
 
     def test_two_models_unique_id(self):
+        ins1 = BaseModel()
+        ins2 = BaseModel()
+        self.assertNotEqual(ins1.id, ins2.id)
+
+    def test_two_models_created_at(self):
+        ins1 = BaseModel()
+        sleep(0.1)
+        ins2 = BaseModel()
+        self.assertLess(ins1.created_at, ins2.created_at)
+
+    def test_two_models_updated_at(self):
+        ins1 = BaseModel()
+        sleep(0.1)
+        ins2 = BaseModel()
+        self.assertLess(ins1.updated_at, ins2.updated_at)
+
+    def test_str_representaion(self):
+        tdt = datetime.today()
+        tdt_repr = repr(tdt)
+        ins = BaseModel()
+        ins.id = "200359"
+        ins.created_at = ins.updated_at = tdt
+        insstr= ins.__str__()
+        self.assertIn("[BaseModel] (200359)", insstr)
+        self.assertIn("'id': '200359'", insstr)
+        self.assertIn("'created_at':" + tdt_repr, insstr)
+        self.assertIn("'updated_at':" + tdt_repr, insstr)
+    def test_unused_args(self):
+        ins = BaseModel(None)
+        self.assertNotIn(None, ins.__dict__.values())
+
+    def test_instantion_without_Kwargs(self):
+        

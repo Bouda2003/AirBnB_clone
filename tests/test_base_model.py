@@ -11,7 +11,7 @@ import models
 import unittest
 from time import sleep
 from datetime import datetime
-from models.base_modle import BaseModel
+from models.base_model import BaseModel
 
 
 class TestBaseModel_instant(unittest.TestCase):
@@ -58,8 +58,8 @@ class TestBaseModel_instant(unittest.TestCase):
         insstr = ins.__str__()
         self.assertIn("[BaseModel] (200359)", insstr)
         self.assertIn("'id': '200359'", insstr)
-        self.assertIn("'created_at':" + tdt_repr, insstr)
-        self.assertIn("'updated_at':" + tdt_repr, insstr)
+        self.assertIn("'created_at': " + tdt_repr, insstr)
+        self.assertIn("'updated_at': " + tdt_repr, insstr)
 
     def test_unused_args(self):
         ins = BaseModel(None)

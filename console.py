@@ -127,8 +127,11 @@ class HBNBCommand(cmd.Cmd):
         elif len(Tokens) == 3:
             print("** value missing **")
         else:
-            class_name, instance_id, attr_name, attr_value =
-            Tokens[0], Tokens[1], Tokens[2], Tokens[3]
+            class_name = Tokens[0]
+            instance_id = Tokens[1]
+            attr_name = Tokens[2]
+            attr_value = Tokens[3]
+
             if class_name not in HBNBCommand.used_classes:
                 print("** class doesn't exist **")
                 return

@@ -6,3 +6,4 @@ meet me later
 -**console**: control
 -**models**: class models
 -**filestorage**: stores data in and from a file
+WE ARE DOING IT

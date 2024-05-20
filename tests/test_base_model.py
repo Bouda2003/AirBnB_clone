@@ -21,7 +21,7 @@ class TestBaseModel_instant(unittest.TestCase):
         self.assertEqual(BaseModel, type(BaseModel()))
 
     def test_new_instant(self):
-        self.assertIn(BaseModel(), type(BaseModel(), models.storage.all().values())
+        self.assertIn(BaseModel(), models.storage.all().values())
 
     def test_id_is_str(self):
         self.assertEqual(str, type(BaseModel().id))
@@ -55,14 +55,126 @@ class TestBaseModel_instant(unittest.TestCase):
         ins = BaseModel()
         ins.id = "200359"
         ins.created_at = ins.updated_at = tdt
-        insstr= ins.__str__()
+        insstr = ins.__str__()
         self.assertIn("[BaseModel] (200359)", insstr)
         self.assertIn("'id': '200359'", insstr)
         self.assertIn("'created_at':" + tdt_repr, insstr)
         self.assertIn("'updated_at':" + tdt_repr, insstr)
+
     def test_unused_args(self):
         ins = BaseModel(None)
         self.assertNotIn(None, ins.__dict__.values())
 
-    def test_instantion_without_Kwargs(self):
-        
+    def test_instantion_with_Kwargs(self):
+        tdt = datetime.today()
+        tdt_iso = tdt.isoformat()
+        ins = BaseModel(id="200359", created_at=tdt_iso, updated_at=tdt_iso)
+        self.assertEqual(ins.id, "200359")
+        self.assertEqual(ins.created_at, tdt)
+        self.assertEqual(ins.updated_at, tdt)
+
+
+class Test_BaseModel_save(unittest.TestCase):
+    """Testing save method in BaseModel"""
+
+    @classmethod
+    def setUp(self):
+        try:
+            os.rename("file.json", "tmp")
+        except IOError:
+            pass
+
+    @classmethod
+    def tearDown(self):
+        try:
+            os.remove("file.json")
+        except IOError:
+            pass
+        try:
+            os.rename("tmp", "file.json")
+        except IOError:
+            pass
+
+    def test_save1(self):
+        ins = BaseModel()
+        sleep(0.1)
+        first_updated_at = ins.updated_at
+        ins.save()
+        self.assertLess(first_updated_at, ins.updated_at)
+
+    def test_save2(self):
+        ins = BaseModel()
+        sleep(0.1)
+        first_updated_at = ins.updated_at
+        ins.save()
+        second_updated_at = ins.updated_at
+        self.assertLess(first_updated_at, second_updated_at)
+        sleep(0.1)
+        ins.save()
+        self.assertLess(second_updated_at, ins.updated_at)
+
+    def test_save_with_args(self):
+        ins = BaseModel()
+        with self.assertRaises(TypeError):
+            ins.save(None)
+
+    def test_save_updates_file(self):
+        ins = BaseModel()
+        ins.save()
+        insid = "BaseModel." + ins.id
+        with open("file.json", "r") as f:
+            self.assertIn(insid, f.read())
+
+
+class TestBaseModel_to_dict(unittest.TestCase):
+    """Unittests for testing to_dict method of the BaseModel class."""
+
+    def test_to_dict_type(self):
+        ins = BaseModel()
+        self.assertTrue(dict, type(ins.to_dict()))
+
+    def test_to_dict_contains_correct_keys(self):
+        ins = BaseModel()
+        self.assertIn("id", ins.to_dict())
+        self.assertIn("created_at", ins.to_dict())
+        self.assertIn("updated_at", ins.to_dict())
+        self.assertIn("__class__", ins.to_dict())
+
+    def test_to_dict_contains_added_attributes(self):
+        ins = BaseModel()
+        ins.name = "Bouda"
+        ins.my_number = 30
+        self.assertIn("name", ins.to_dict())
+        self.assertIn("my_number", ins.to_dict())
+
+    def test_to_dict_datetime_attributes_are_strs(self):
+        ins = BaseModel()
+        ins_dict = ins.to_dict()
+        self.assertEqual(str, type(ins_dict["created_at"]))
+        self.assertEqual(str, type(ins_dict["updated_at"]))
+
+    def test_to_dict_output(self):
+        tdt = datetime.today()
+        ins = BaseModel()
+        ins.id = "200359"
+        ins.created_at = ins.updated_at = tdt
+        tdict = {
+            'id': '200359',
+            '__class__': 'BaseModel',
+            'created_at': tdt.isoformat(),
+            'updated_at': tdt.isoformat()
+        }
+        self.assertDictEqual(ins.to_dict(), tdict)
+
+    def test_contrast_to_dict_dunder_dict(self):
+        ins = BaseModel()
+        self.assertNotEqual(ins.to_dict(), ins.__dict__)
+
+    def test_to_dict_with_arg(self):
+        ins = BaseModel()
+        with self.assertRaises(TypeError):
+            ins.to_dict(None)
+
+
+if __name__ == "__main__":
+    unittest.main()

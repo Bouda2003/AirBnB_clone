@@ -20,7 +20,7 @@ class HBNBCommand(cmd.Cmd):
     """
     prompt = "(hbnb)"
     used_classes = ["BaseModel", "User", "State",
-                    "City", "place", "Amenity", "Review"]
+                    "City", "Place", "Amenity", "Review"]
 
     def emptyline(self):
         """I think Iam blind"""
@@ -50,7 +50,8 @@ class HBNBCommand(cmd.Cmd):
         elif Tokens[0] not in HBNBCommand.used_classes:
             print("** class doesn't exist **")
         else:
-            new_ins = BaseModel()
+            init = eval(Tokens[0])
+            new_ins = init()
             new_ins.save()
             print(new_ins.id)
 

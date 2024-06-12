@@ -7,7 +7,7 @@ class User(BaseModel):
     """user class"""
     email = ""
     password = ""
-    fist_name = ""
+    first_name = ""
     last_name = ""
 
     def __init__(self, *args, **kwargs):

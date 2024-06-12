@@ -11,4 +11,3 @@ ana b7b amir eid (L)(L)
 ana 21 sana mogb gad bdwr 3la couble mota7rer
 b7b marcus aurelias
 ab8a kentaki
-kosom abeer
